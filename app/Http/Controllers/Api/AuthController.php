@@ -9,11 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ForgetRequest;
+use App\Http\Requests\ForgetPasswordRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ResetPasswordRequest;
 
 class AuthController extends Controller
 {
@@ -67,7 +68,7 @@ class AuthController extends Controller
 
     }
 
-    public function forgetPassword(ForgetRequest $request)
+    public function forgetPassword(ForgetPasswordRequest $request)
     {
         $email = $request->email;
         //Email Check
@@ -98,5 +99,38 @@ class AuthController extends Controller
             ],400);
         }
 
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $email = $request->email;
+        $token = $request->token;
+        $password = Hash::make($request->password);
+
+        //Email & Token Check Match
+        $emailCheck = DB::table('password_reset_tokens')->where('email',$email)->first();
+        $tokenCheck = DB::table('password_reset_tokens')->where('token',$token)->first();
+
+        if (!$emailCheck) {
+            return response()->json([
+                'message' => "Email Not Found!",
+            ],401);
+        }
+
+        if (!$tokenCheck) {
+            return response()->json([
+                'message' => "Pin Code Invaild!",
+            ],401);
+        }
+
+        //All Match than update passowrd & Delete password_reset_token
+        DB::table('users')->where('email',$email)->update([
+            'password' => $password,
+        ]);
+        DB::table('password_reset_tokens')->where('email',$email)->delete();
+
+        return response()->json([
+            'message' => "Password Change Successfully!",
+        ],401);
     }
 }

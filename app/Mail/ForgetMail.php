@@ -29,7 +29,7 @@ class ForgetMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Forget Mail',
+            subject: 'Forget Password',
         );
     }
 
@@ -39,7 +39,7 @@ class ForgetMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.forget',
+            markdown: 'mail.forget_password',
             with: [
                 'data' => $this->data,
             ],
