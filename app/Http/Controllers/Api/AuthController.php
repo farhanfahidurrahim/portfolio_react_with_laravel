@@ -133,4 +133,9 @@ class AuthController extends Controller
             'message' => "Password Change Successfully!",
         ],401);
     }
+
+    public function currentUser()
+    {
+        return Auth::user();
+    }
 }
