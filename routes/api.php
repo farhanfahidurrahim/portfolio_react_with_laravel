@@ -18,3 +18,4 @@ use Illuminate\Support\Facades\Route;
 //_________Auth Route
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
+Route::post('forget/password', [AuthController::class, 'forgetPassword']);
