@@ -20,4 +20,4 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('forget/password', [AuthController::class, 'forgetPassword']);
 Route::post('reset/password', [AuthController::class, 'resetPassword']);
-Route::get('user', [AuthController::class, 'currentUser'])->middleware('auth:api');
+Route::get('user', [AuthController::class, 'currentUser'])->middleware('auth:sanctum');
